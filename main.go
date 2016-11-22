@@ -2,23 +2,23 @@ package main
 
 import (
 	"fmt"
-	"html/template"
 	"net/http"
-	"strings"
-
 	"os"
+	"strings"
 
 	"github.com/Akagi201/light"
 	"github.com/Sirupsen/logrus"
+	"github.com/chilts/temple"
 	"github.com/hpcloud/tail"
 	"github.com/jessevdk/go-flags"
 	"golang.org/x/net/websocket"
 )
 
 var opts struct {
-	ListenAddr string `long:"listen" default:"0.0.0.0:8327" description:"HTTP address and port to listen at"`
-	Template   string `long:"template" default:"./template/index.html" description:"the template file"`
-	Log        string `long:"log" description:"the log file to tail -f"`
+	ListenAddr  string `long:"listen" default:"0.0.0.0:8327" description:"HTTP address and port to listen at"`
+	TemplateDir string `long:"template" default:"data/template" description:"the template directory"`
+	BaseFile    string `long:"basefile" default:"index.html" description:"the base file of the template"`
+	Log         string `long:"log" description:"the log file to tail -f"`
 }
 
 var log *logrus.Logger
@@ -34,7 +34,11 @@ func init() {
 
 func handleHome(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	t, _ := template.ParseFiles(opts.Template)
+	t, err := temple.NewTemple(opts.TemplateDir, opts.BaseFile, true)
+	if err != nil {
+		log.Printf("Template parse failed, err: %v", err)
+		return
+	}
 	v := struct {
 		Host string
 		Log  string
@@ -42,7 +46,15 @@ func handleHome(w http.ResponseWriter, r *http.Request) {
 		r.Host,
 		opts.Log,
 	}
-	t.Execute(w, &v)
+	tp, err := t.Get(opts.BaseFile)
+	if err != nil {
+		log.Printf("Template get failed, err: %v", err)
+		return
+	}
+	if err = tp.Execute(w, &v); err != nil {
+		log.Printf("Template execute failed, err: %v", err)
+		return
+	}
 }
 
 func handleTail(w http.ResponseWriter, r *http.Request) {
