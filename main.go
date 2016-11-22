@@ -33,7 +33,7 @@ func init() {
 func handleHome(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	t, _ := template.ParseFiles(opts.Template)
-	var v = struct {
+	v := struct {
 		Host string
 	}{
 		r.Host,
