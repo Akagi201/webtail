@@ -40,7 +40,7 @@
     </style>
 </head>
 <body>
-<h1>WebTail</h1>
+<h1>{{.Log}}</h1>
 <div id="messages"></div>
 <script>
     $(document).ready(function () {
@@ -49,9 +49,7 @@
             ws.onmessage = function (e) {
                 $("#messages").append("<p>" + e.data + "</p>");
                 console.log("websocket: " + e.data);
-                $('html, body').animate({scrollTop: $(document).height()}, 'fast');
-                // element = document.getElementById('messages');
-                // window.scroll(0, element.scrollTop + element.scrollHeight);
+                $('html, body').animate({scrollTop: $(document).height()}, 'normal');
             };
         } else {
             alert("WebSocket NOT SUPPORTED!");

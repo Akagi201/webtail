@@ -37,8 +37,10 @@ func handleHome(w http.ResponseWriter, r *http.Request) {
 	t, _ := template.ParseFiles(opts.Template)
 	v := struct {
 		Host string
+		Log  string
 	}{
 		r.Host,
+		opts.Log,
 	}
 	t.Execute(w, &v)
 }
