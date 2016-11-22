@@ -1,0 +1,34 @@
+<html>
+<head>
+    <title>WebTail</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <style type="text/css">
+        <!--
+        #messages {
+            background: black;
+        }
+
+        #messages p {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #ddd;
+            line-height: 140%;
+            font-size: 12px;
+        }
+
+        -->
+    </style>
+</head>
+<body>
+<div id="messages"></div>
+<script>
+    ws = new WebSocket("ws://{{.Host}}/follow");
+    ws.onmessage = function (e) {
+        $("#messages").append("<p>" + e.data + "</p>");
+        console.log("websock: " + e.data);
+        // element = document.getElementById('messages');
+        // window.scroll(0, element.scrollTop + element.scrollHeight);
+    };
+</script>
+</body>
+</html>
