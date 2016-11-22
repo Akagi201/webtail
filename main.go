@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"os"
 	"strings"
@@ -59,6 +58,7 @@ func handleTail(w http.ResponseWriter, r *http.Request) {
 	}
 	for line := range t.Lines {
 		log.Println(line.Text)
+		w.Write([]byte(line.Text))
 	}
 }
 
@@ -69,7 +69,7 @@ func handleFollow(ws *websocket.Conn) {
 		return
 	}
 	for line := range t.Lines {
-		fmt.Println(line.Text)
+		log.Println(line.Text)
 		ws.Write([]byte(line.Text))
 	}
 }
