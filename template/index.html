@@ -6,10 +6,11 @@
         body {
             background-color: black;
             color: white;
-            font:13px/1.4 monaco, "Courier New", Courier, monospace;
+            font: 13px/1.4 monaco, "Courier New", Courier, monospace;
             margin: 0px;
             padding: 10px 20px;
         }
+
         h1 {
             background-color: #222;
             color: greenyellow;
@@ -22,6 +23,7 @@
             left: 0;
             padding: 5px 20px;
         }
+
         #messages {
             margin: 30px 0px 10px 0px;
             padding: 10px 0px;
@@ -47,7 +49,7 @@
             ws.onmessage = function (e) {
                 $("#messages").append("<p>" + e.data + "</p>");
                 console.log("websocket: " + e.data);
-                $('html, body').animate({scrollTop:$(document).height()}, 'slow');
+                $('html, body').animate({scrollTop: $(document).height()}, 'fast');
                 // element = document.getElementById('messages');
                 // window.scroll(0, element.scrollTop + element.scrollHeight);
             };

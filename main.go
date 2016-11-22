@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"strings"
 
+	"os"
+
 	"github.com/Akagi201/light"
 	"github.com/Sirupsen/logrus"
 	"github.com/hpcloud/tail"
@@ -42,7 +44,7 @@ func handleHome(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleTail(w http.ResponseWriter, r *http.Request) {
-	t, err := tail.TailFile(opts.Log, tail.Config{Follow: true, ReOpen: true})
+	t, err := tail.TailFile(opts.Log, tail.Config{Follow: true, ReOpen: true, Location: &tail.SeekInfo{Offset: 0, Whence: os.SEEK_END}})
 	if err != nil {
 		log.Printf("tail file failed, err: %v", err)
 		return
@@ -53,7 +55,7 @@ func handleTail(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleFollow(ws *websocket.Conn) {
-	t, err := tail.TailFile(opts.Log, tail.Config{Follow: true, ReOpen: true})
+	t, err := tail.TailFile(opts.Log, tail.Config{Follow: true, ReOpen: true, Location: &tail.SeekInfo{Offset: 0, Whence: os.SEEK_END}})
 	if err != nil {
 		log.Printf("tail file failed, err: %v", err)
 		return
