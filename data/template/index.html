@@ -49,7 +49,7 @@
             ws.onmessage = function (e) {
                 $("#messages").append("<p>" + e.data + "</p>");
                 console.log("websocket: " + e.data);
-                $('html, body').animate({scrollTop: $(document).height()}, 'normal');
+                $('html, body').animate({scrollTop: $(document).height()}, 'fast');
             };
         } else {
             alert("WebSocket NOT SUPPORTED!");
