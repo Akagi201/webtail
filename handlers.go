@@ -12,11 +12,7 @@ import (
 
 func handleHome(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	t, err := template.New("base").Parse(opts.Template)
-	if err != nil {
-		log.Printf("Template parse failed, err: %v", err)
-		return
-	}
+	t := template.Must(template.New("base").Parse(string(MustAsset(opts.Template))))
 	v := struct {
 		Host string
 		Log  string
@@ -24,7 +20,7 @@ func handleHome(w http.ResponseWriter, r *http.Request) {
 		r.Host,
 		opts.Log,
 	}
-	if err = t.Execute(w, &v); err != nil {
+	if err := t.Execute(w, &v); err != nil {
 		log.Printf("Template execute failed, err: %v", err)
 		return
 	}
